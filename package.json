@@ -1,0 +1,30 @@
+{
+  "name": "thebookstore",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "graphql-yoga": "^1.14.12",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "lint": "eslint src/ server/ --config .eslintrc.json --fix",
+    "server": "nodemon server/",
+    "debug": "nodemon --inspect server/"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.6",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.1.0",
+    "eslint-plugin-react": "^7.10.0",
+    "nodemon": "^1.18.1",
+    "prettier-eslint": "^8.8.2"
+  }
+}
