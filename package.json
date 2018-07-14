@@ -23,7 +23,8 @@
     "debug": "nodemon --inspect server/",
     "migrate": "prisma deploy",
     "seed": "prisma seed",
-    "reset": "prisma reset"
+    "reset": "prisma reset",
+    "boot":"cd database && docker-compose up -d && cd .."
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
