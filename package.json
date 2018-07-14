@@ -2,7 +2,11 @@
   "name": "thebookstore",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "url": "https://github.com/dhayaec/thebookstore.git"
+  },
   "dependencies": {
+    "dotenv": "^6.0.0",
     "graphql-yoga": "^1.14.12",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
