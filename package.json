@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "dotenv": "^6.0.0",
+    "graphql": "^0.13.2",
     "graphql-yoga": "^1.14.12",
     "prisma-binding": "^2.1.0",
     "react": "^16.4.1",
@@ -16,7 +17,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom src/",
+    "test:server": "jest ./server --watch",
     "eject": "react-scripts eject",
     "lint": "eslint src/ server/ --config .eslintrc.json --fix",
     "server": "nodemon server/",
@@ -24,7 +26,7 @@
     "migrate": "prisma deploy",
     "seed": "prisma seed",
     "reset": "prisma reset",
-    "boot":"cd database && docker-compose up -d && cd .."
+    "boot": "cd database && docker-compose up -d && cd .."
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
@@ -33,6 +35,8 @@
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-jsx-a11y": "^6.1.0",
     "eslint-plugin-react": "^7.10.0",
+    "jest": "20.0.4",
+    "jest-cli": "20.0.4",
     "nodemon": "^1.18.1",
     "prettier-eslint": "^8.8.2"
   }
