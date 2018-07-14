@@ -8,6 +8,7 @@
   "dependencies": {
     "dotenv": "^6.0.0",
     "graphql-yoga": "^1.14.12",
+    "prisma-binding": "^2.1.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-scripts": "1.1.4"
@@ -19,7 +20,10 @@
     "eject": "react-scripts eject",
     "lint": "eslint src/ server/ --config .eslintrc.json --fix",
     "server": "nodemon server/",
-    "debug": "nodemon --inspect server/"
+    "debug": "nodemon --inspect server/",
+    "migrate": "prisma deploy",
+    "seed": "prisma seed",
+    "reset": "prisma reset"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",

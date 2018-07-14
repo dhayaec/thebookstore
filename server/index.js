@@ -1,40 +1,60 @@
 require('dotenv').config();
 const { GraphQLServer } = require('graphql-yoga');
-const path = require('path');
-
-const links = [
-  {
-    id: 'link-0',
-    description: 'This is as description',
-    url: 'google.com',
-  },
-];
-
-let idCount = links.length;
+const { Prisma } = require('prisma-binding');
 
 const resolvers = {
   Query: {
-    info: () => process.env.DB_HOST,
-    feed: () => links,
+    feed(parent, args, ctx, info) {
+      return ctx.db.query.posts({ where: { isPublished: true } }, info);
+    },
+    drafts(parent, args, ctx, info) {
+      return ctx.db.query.posts({ where: { isPublished: false } }, info);
+    },
+    post(parent, { id }, ctx, info) {
+      return ctx.db.query.post({ where: { id } }, info);
+    },
   },
   Mutation: {
-    post: (_, args) => {
-      const { description, url } = args;
-      idCount += 1;
-      const link = {
-        id: `link-${idCount}`,
-        description,
-        url,
-      };
-      links.push(link);
-      return link;
+    createDraft(parent, { title, text }, ctx, info) {
+      return ctx.db.mutation.createPost(
+        {
+          data: {
+            title,
+            text,
+          },
+        },
+        info,
+      );
+    },
+    deletePost(parent, { id }, ctx, info) {
+      return ctx.db.mutation.deletePost({ where: { id } }, info);
+    },
+    publish(parent, { id }, ctx, info) {
+      return ctx.db.mutation.updatePost(
+        {
+          where: { id },
+          data: { isPublished: true },
+        },
+        info,
+      );
     },
   },
 };
 
 const server = new GraphQLServer({
-  typeDefs: path.join(__dirname, './schema.graphql'),
+  typeDefs: './server/schema.graphql',
   resolvers,
+  resolverValidationOptions: {
+    requireResolversForResolveType: false,
+  },
+  context: req => ({
+    ...req,
+    db: new Prisma({
+      typeDefs: process.env.PRISMA_GENERATED_SCHEMA,
+      endpoint: process.env.PRISMA_ENDPOINT,
+      debug: true,
+    }),
+  }),
 });
 
 const options = {
@@ -44,4 +64,6 @@ const options = {
   playground: '/playground',
 };
 
-server.start(options, ({ port }) => console.log(`localhost:${port}`));
+server.start(options, ({ port }) => console.log(
+  `port ${port}`,
+));
