@@ -1,4 +1,4 @@
-const { add, subtract, multiply } = require('./utils');
+const { add, subtract } = require('./utils');
 
 describe('utils test', () => {
   describe('add()', () => {
@@ -9,11 +9,6 @@ describe('utils test', () => {
   describe('substract()', () => {
     it('should substract numbers', () => {
       expect(subtract(7, 1)).toEqual(6);
-    });
-  });
-  describe('multiply', () => {
-    it('should multiply numbers', () => {
-      expect(multiply(5, 5)).toEqual(25);
     });
   });
 });
