@@ -3,13 +3,14 @@
     "homescreen",
     "keyframes",
     "packagemanager",
+    "prisma",
     "thebookstore",
     "unmount",
     "webfonts"
   ],
-  "editor.formatOnSave": true,
-  "flow.useNPMPackagedFlow": true,
+  "editor.formatOnSave": false,
   "javascript.validate.enable": false,
   "javascript.format.enable": false,
-  "prettier.eslintIntegration": true
+  "prettier.eslintIntegration": true,
+  "eslint.autoFixOnSave": true
 }
