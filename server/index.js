@@ -1,19 +1,39 @@
+require('dotenv').config();
 const { GraphQLServer } = require('graphql-yoga');
+const path = require('path');
 
-const typeDefs = `
-type Query {
-  info: String!
-}
-`;
+const links = [
+  {
+    id: 'link-0',
+    description: 'This is as description',
+    url: 'google.com',
+  },
+];
+
+let idCount = links.length;
 
 const resolvers = {
   Query: {
-    info: () => 'This is the API',
+    info: () => process.env.DB_HOST,
+    feed: () => links,
+  },
+  Mutation: {
+    post: (_, args) => {
+      const { description, url } = args;
+      idCount += 1;
+      const link = {
+        id: `link-${idCount}`,
+        description,
+        url,
+      };
+      links.push(link);
+      return link;
+    },
   },
 };
 
 const server = new GraphQLServer({
-  typeDefs,
+  typeDefs: path.join(__dirname, './schema.graphql'),
   resolvers,
 });
 
