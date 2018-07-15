@@ -49,5 +49,8 @@
       "npm test -- --coverage",
       "git add"
     ]
+  },
+  "jest":{
+    "testPathIgnorePatterns":["/src"]
   }
 }
