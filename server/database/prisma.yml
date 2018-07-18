@@ -1,0 +1,17 @@
+endpoint: http://localhost:4466
+datamodel: datamodel.graphql
+
+# Seed your service with initial data based on `seed.graphql`.
+seed:
+  import: seed.graphql
+
+# Download the GraphQL schema of the Prisma API into
+# `src/generated/prisma.graphql` (as specfied in `.graphqlconfig.yml`).
+# Then generate the corresponding TypeScript definitions into
+# `src/generated/prisma.ts` (also specfied in `.graphqlconfig.yml`)
+# with `graphql codegen` .
+hooks:
+  post-deploy:
+    - graphql get-schema --project database
+    - graphql codegen
+    - npm run gen-types

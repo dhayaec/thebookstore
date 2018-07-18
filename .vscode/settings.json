@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "envalid",
     "homescreen",
     "keyframes",
     "packagemanager",
@@ -13,5 +14,12 @@
   "javascript.validate.enable": false,
   "javascript.format.enable": false,
   "prettier.eslintIntegration": true,
-  "eslint.autoFixOnSave": true
+  "eslint.autoFixOnSave": true,
+  "files.exclude": {
+    "node_modules/": true,
+    "server/node_modules/": true,
+    "**/._*": true
+},
+"eslint.enable": true,
+"tslint.autoFixOnSave": true
 }
