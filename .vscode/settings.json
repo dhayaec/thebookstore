@@ -10,7 +10,7 @@
     "unmount",
     "webfonts"
   ],
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   "javascript.validate.enable": false,
   "javascript.format.enable": false,
   "prettier.eslintIntegration": true,

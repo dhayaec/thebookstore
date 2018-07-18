@@ -1,10 +1,11 @@
-import { UserWhereInput } from './../generated/prisma';
-import { GraphQLResolveInfo } from 'graphql';
-import { PostQueryArgs, PostWhereInput } from '../typings/types';
 import { getUserId, Context } from '../utils';
 
 export const Query = {
-  feed(_: never, args: PostWhereInput, ctx: Context, info: GraphQLResolveInfo) {
+  feed(parent, args, ctx: Context, info) {
+    return ctx.db.query.posts({ where: { isPublished: true } }, info);
+  },
+
+  drafts(parent, args, ctx: Context, info) {
     const id = getUserId(ctx);
 
     const where = {
@@ -17,11 +18,11 @@ export const Query = {
     return ctx.db.query.posts({ where }, info);
   },
 
-  post(_: never, { id }: PostQueryArgs, ctx: Context, info: GraphQLResolveInfo) {
+  post(parent, { id }, ctx: Context, info) {
     return ctx.db.query.post({ where: { id } }, info);
   },
 
-  me(_: never, args: UserWhereInput, ctx: Context, info: GraphQLResolveInfo) {
+  me(parent, args, ctx: Context, info) {
     const id = getUserId(ctx);
     return ctx.db.query.user({ where: { id } }, info);
   },

@@ -4,7 +4,7 @@ import { auth } from './Mutation/auth';
 import { post } from './Mutation/post';
 import { AuthPayload } from './AuthPayload';
 
-const resolvers = {
+export default {
   Query,
   Mutation: {
     ...auth,
@@ -13,5 +13,3 @@ const resolvers = {
   Subscription,
   AuthPayload,
 };
-
-export default resolvers;

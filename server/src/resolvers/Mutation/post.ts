@@ -1,15 +1,7 @@
-import { GraphQLResolveInfo } from 'graphql';
 import { getUserId, Context } from '../../utils';
-import { PostCreateInput } from '../../generated/prisma';
-import { PublishMutationArgs, DeletePostMutationArgs } from '../../typings/types';
 
 export const post = {
-  async createDraft(
-    _: never,
-    { title, text }: PostCreateInput,
-    ctx: Context,
-    info: GraphQLResolveInfo,
-  ) {
+  async createDraft(parent, { title, text }, ctx: Context, info) {
     const userId = getUserId(ctx);
     return ctx.db.mutation.createPost(
       {
@@ -26,19 +18,14 @@ export const post = {
     );
   },
 
-  async publish(
-    _: never,
-    { id }: PublishMutationArgs,
-    ctx: Context,
-    info: GraphQLResolveInfo,
-  ) {
+  async publish(parent, { id }, ctx: Context, info) {
     const userId = getUserId(ctx);
     const postExists = await ctx.db.exists.Post({
       id,
       author: { id: userId },
     });
     if (!postExists) {
-      throw new Error('Post not found or you\'re not the author');
+      throw new Error("Post not found or you're not the author");
     }
 
     return ctx.db.mutation.updatePost(
@@ -50,18 +37,14 @@ export const post = {
     );
   },
 
-  async deletePost(
-    _: never,
-    { id }: DeletePostMutationArgs,
-    ctx: Context,
-  ) {
+  async deletePost(parent, { id }, ctx: Context, info) {
     const userId = getUserId(ctx);
     const postExists = await ctx.db.exists.Post({
       id,
       author: { id: userId },
     });
     if (!postExists) {
-      throw new Error('Post not found or you\'re not the author');
+      throw new Error("Post not found or you're not the author");
     }
 
     return ctx.db.mutation.deletePost({ where: { id } });
