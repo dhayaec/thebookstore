@@ -49,4 +49,43 @@ export const post = {
 
     return ctx.db.mutation.deletePost({ where: { id } });
   },
+
+  async likePost(parent, { id }, ctx: Context, info) {
+    const userId = getUserId(ctx);
+
+    const likeExists = await ctx.db.exists.PostLikes({
+      post: {
+        id,
+      },
+      user: {
+        id: userId,
+      },
+    });
+
+    if (likeExists) {
+      throw new Error('Already liked this post');
+    }
+
+    await ctx.db.mutation.createPostLikes({
+      data: {
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
+        post: {
+          connect: {
+            id,
+          },
+        },
+      },
+    });
+
+    return ctx.db.query.post(
+      {
+        where: { id },
+      },
+      info,
+    );
+  },
 };

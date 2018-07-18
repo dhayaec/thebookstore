@@ -1,7 +1,11 @@
-# source: https://eu1.prisma.sh/public-greenjester-179/server/dev
-# timestamp: Wed Jul 18 2018 16:04:24 GMT+0530 (India Standard Time)
+# source: http://localhost:4466/thebookstore
+# timestamp: Wed Jul 18 2018 17:46:33 GMT+0530 (India Standard Time)
 
 type AggregatePost {
+  count: Int!
+}
+
+type AggregatePostLikes {
   count: Int!
 }
 
@@ -23,16 +27,22 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
+  createPostLikes(data: PostLikesCreateInput!): PostLikes!
   createPost(data: PostCreateInput!): Post!
   createUser(data: UserCreateInput!): User!
+  updatePostLikes(data: PostLikesUpdateInput!, where: PostLikesWhereUniqueInput!): PostLikes
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  deletePostLikes(where: PostLikesWhereUniqueInput!): PostLikes
   deletePost(where: PostWhereUniqueInput!): Post
   deleteUser(where: UserWhereUniqueInput!): User
+  upsertPostLikes(where: PostLikesWhereUniqueInput!, create: PostLikesCreateInput!, update: PostLikesUpdateInput!): PostLikes!
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  updateManyPostLikeses(data: PostLikesUpdateInput!, where: PostLikesWhereInput): BatchPayload!
   updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  deleteManyPostLikeses(where: PostLikesWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
@@ -96,6 +106,11 @@ input PostCreateManyWithoutAuthorInput {
   connect: [PostWhereUniqueInput!]
 }
 
+input PostCreateOneInput {
+  create: PostCreateInput
+  connect: PostWhereUniqueInput
+}
+
 input PostCreateWithoutAuthorInput {
   isPublished: Boolean
   title: String!
@@ -109,6 +124,150 @@ type PostEdge {
 
   """A cursor for use in pagination."""
   cursor: String!
+}
+
+type PostLikes implements Node {
+  id: ID!
+  user(where: UserWhereInput): User!
+  post(where: PostWhereInput): Post!
+}
+
+"""A connection to a list of items."""
+type PostLikesConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [PostLikesEdge]!
+  aggregate: AggregatePostLikes!
+}
+
+input PostLikesCreateInput {
+  user: UserCreateOneInput!
+  post: PostCreateOneInput!
+}
+
+"""An edge in a connection."""
+type PostLikesEdge {
+  """The item at the end of the edge."""
+  node: PostLikes!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum PostLikesOrderByInput {
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type PostLikesPreviousValues {
+  id: ID!
+}
+
+type PostLikesSubscriptionPayload {
+  mutation: MutationType!
+  node: PostLikes
+  updatedFields: [String!]
+  previousValues: PostLikesPreviousValues
+}
+
+input PostLikesSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [PostLikesSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [PostLikesSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [PostLikesSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: PostLikesWhereInput
+}
+
+input PostLikesUpdateInput {
+  user: UserUpdateOneInput
+  post: PostUpdateOneInput
+}
+
+input PostLikesWhereInput {
+  """Logical AND on all given filters."""
+  AND: [PostLikesWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [PostLikesWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [PostLikesWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  user: UserWhereInput
+  post: PostWhereInput
+}
+
+input PostLikesWhereUniqueInput {
+  id: ID
 }
 
 enum PostOrderByInput {
@@ -174,6 +333,13 @@ input PostSubscriptionWhereInput {
   node: PostWhereInput
 }
 
+input PostUpdateDataInput {
+  isPublished: Boolean
+  title: String
+  text: String
+  author: UserUpdateOneWithoutPostsInput
+}
+
 input PostUpdateInput {
   isPublished: Boolean
   title: String
@@ -190,6 +356,14 @@ input PostUpdateManyWithoutAuthorInput {
   upsert: [PostUpsertWithWhereUniqueWithoutAuthorInput!]
 }
 
+input PostUpdateOneInput {
+  create: PostCreateInput
+  connect: PostWhereUniqueInput
+  delete: Boolean
+  update: PostUpdateDataInput
+  upsert: PostUpsertNestedInput
+}
+
 input PostUpdateWithoutAuthorDataInput {
   isPublished: Boolean
   title: String
@@ -199,6 +373,11 @@ input PostUpdateWithoutAuthorDataInput {
 input PostUpdateWithWhereUniqueWithoutAuthorInput {
   where: PostWhereUniqueInput!
   data: PostUpdateWithoutAuthorDataInput!
+}
+
+input PostUpsertNestedInput {
+  update: PostUpdateDataInput!
+  create: PostCreateInput!
 }
 
 input PostUpsertWithWhereUniqueWithoutAuthorInput {
@@ -385,6 +564,9 @@ input PostWhereInput {
   """All values not ending with the given string."""
   text_not_ends_with: String
   author: UserWhereInput
+  _MagicalBackRelation_PostToPostLikes_every: PostLikesWhereInput
+  _MagicalBackRelation_PostToPostLikes_some: PostLikesWhereInput
+  _MagicalBackRelation_PostToPostLikes_none: PostLikesWhereInput
 }
 
 input PostWhereUniqueInput {
@@ -392,10 +574,13 @@ input PostWhereUniqueInput {
 }
 
 type Query {
+  postLikeses(where: PostLikesWhereInput, orderBy: PostLikesOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PostLikes]!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  postLikes(where: PostLikesWhereUniqueInput!): PostLikes
   post(where: PostWhereUniqueInput!): Post
   user(where: UserWhereUniqueInput!): User
+  postLikesesConnection(where: PostLikesWhereInput, orderBy: PostLikesOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostLikesConnection!
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
 
@@ -407,6 +592,7 @@ type Query {
 }
 
 type Subscription {
+  postLikes(where: PostLikesSubscriptionWhereInput): PostLikesSubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
@@ -434,6 +620,11 @@ input UserCreateInput {
   password: String!
   name: String!
   posts: PostCreateManyWithoutAuthorInput
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutPostsInput {
@@ -517,11 +708,26 @@ input UserSubscriptionWhereInput {
   node: UserWhereInput
 }
 
+input UserUpdateDataInput {
+  email: String
+  password: String
+  name: String
+  posts: PostUpdateManyWithoutAuthorInput
+}
+
 input UserUpdateInput {
   email: String
   password: String
   name: String
   posts: PostUpdateManyWithoutAuthorInput
+}
+
+input UserUpdateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
 }
 
 input UserUpdateOneWithoutPostsInput {
@@ -536,6 +742,11 @@ input UserUpdateWithoutPostsDataInput {
   email: String
   password: String
   name: String
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserUpsertWithoutPostsInput {
@@ -715,6 +926,9 @@ input UserWhereInput {
   posts_every: PostWhereInput
   posts_some: PostWhereInput
   posts_none: PostWhereInput
+  _MagicalBackRelation_PostLikesToUser_every: PostLikesWhereInput
+  _MagicalBackRelation_PostLikesToUser_some: PostLikesWhereInput
+  _MagicalBackRelation_PostLikesToUser_none: PostLikesWhereInput
 }
 
 input UserWhereUniqueInput {

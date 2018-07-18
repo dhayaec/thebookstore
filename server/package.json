@@ -6,7 +6,8 @@
     "debug": "dotenv -- nodemon -e ts,graphql -x ts-node --inspect src/index.ts",
     "playground": "graphql playground",
     "build": "rimraf dist && tsc",
-    "lint":"tslint --config ./tslint.json --project ./tsconfig.json --fix"
+    "lint":"tslint --config ./tslint.json --project ./tsconfig.json --fix",
+    "deploy":"prisma deploy"
   },
   "dependencies": {
     "bcryptjs": "2.4.3",
